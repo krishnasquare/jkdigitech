@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jkdigitalmarketing.vercel.app/sitemap.xml
+Sitemap: https://jkdigitech.vercel.app/sitemap.xml
