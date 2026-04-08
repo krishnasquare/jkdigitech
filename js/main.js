@@ -90,23 +90,39 @@
     }
 
     /* Show loading state */
-    const btn      = form.querySelector('.btn-submit');
+    const btn = form.querySelector('.btn-submit');
     if (btn) {
-      btn.textContent = '⏳ Sending...';
+      btn.textContent = '⏳ Redirecting to WhatsApp...';
       btn.disabled    = true;
     }
 
-    /* Simulate async submit (replace with real fetch/API call) */
-    setTimeout(() => {
-      const clientName = name.value.trim();
-      const clientSvc  = service && service.value ? service.value : 'digital marketing';
+    /* Prepare WhatsApp Message */
+    const clientName  = name.value.trim();
+    const clientEmail = email.value.trim();
+    const clientPhone = phone.value.trim();
+    const clientSvc   = service && service.value ? service.value : 'General Inquiry';
+    const clientMsg   = msg && msg.value ? msg.value.trim() : 'No additional message provided.';
 
+    const whatsappText = `*New Consultation Request*%0A%0A` +
+      `*Name:* ${encodeURIComponent(clientName)}%0A` +
+      `*Email:* ${encodeURIComponent(clientEmail)}%0A` +
+      `*Phone:* ${encodeURIComponent(clientPhone)}%0A` +
+      `*Service:* ${encodeURIComponent(clientSvc)}%0A` +
+      `*Message:* ${encodeURIComponent(clientMsg)}`;
+
+    const whatsappUrl = `https://wa.me/919701477827?text=${whatsappText}`;
+
+    /* Open WhatsApp in new tab after a short delay */
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank');
+
+      /* Show success message in the form area */
       form.innerHTML = `
         <div class="success-msg">
           <div class="success-icon">✅</div>
-          <h3>Message Sent!</h3>
-          <p>Thank you <strong style="color:#22D3EE;">${escapeHtml(clientName)}</strong>! Your interest in <em>${escapeHtml(clientSvc)}</em> has been noted.</p>
-          <p style="margin-top:8px;font-size:13px;color:rgba(255,255,255,0.4);">We'll get back to you within 2 hours during business hours.</p>
+          <h3>Request Sent Successfully!</h3>
+          <p>Thank you <strong style="color:#22D3EE;">${escapeHtml(clientName)}</strong>! We've opened WhatsApp to finalize your request for <em>${escapeHtml(clientSvc)}</em>.</p>
+          <p style="margin-top:8px;font-size:13px;color:rgba(255,255,255,0.4);">If the window didn't open, please check your popup blocker.</p>
           <p style="margin-top:14px;font-size:13px;">
             📞 Or call us directly: 
             <a href="tel:+919701477827" style="color:#22D3EE;font-weight:700;">+91 9701477827</a>
@@ -116,11 +132,11 @@
             style="margin-top:22px;padding:10px 24px;background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.35);border-radius:8px;color:#22D3EE;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.3s;"
             onmouseover="this.style.background='rgba(6,182,212,0.22)'"
             onmouseout="this.style.background='rgba(6,182,212,0.12)'">
-            ← Send Another Message
+            ← Send Another Request
           </button>
         </div>
       `;
-    }, 900);
+    }, 1000);
   };
 
   /* Reset form back to original */
